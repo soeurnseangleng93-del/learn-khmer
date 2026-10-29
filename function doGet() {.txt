@@ -1,0 +1,4 @@
+function doGet() {
+  return HtmlService.createHtmlOutputFromFile('Index')
+      .setTitle('សៀវភៅពាក្យសព្ទកុមារ');
+}

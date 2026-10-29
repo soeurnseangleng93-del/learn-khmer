@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ហ្គេមផ្គូផ្គងរូបភាព និងពាក្យ</title>
+    <style>
+        body {
+            font-family: 'Khmer OS Battambang', Arial, sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .instruction {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .game-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .card {
+            background-color: #fff;
+            border: 3px solid #ccc;
+            border-radius: 12px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        /* ទំហំប្រអប់រូបភាព (Landscape 16:10 ស្រដៀងទំហំថ្នាក់រៀន) */
+        .image-card {
+            width: 150px;
+            height: 100px;
+        }
+        .image-card img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        /* ទំហំប្រអប់ពាក្យ */
+        .text-card {
+            width: 150px;
+            height: 100px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        /* ស្ថានភាពពេលចុចជ្រើសរើស */
+        .selected {
+            border-color: #3498db;
+            background-color: #e8f4f8;
+            transform: scale(1.05);
+        }
+        /* ស្ថានភាពពេលឆ្លើយត្រូវ */
+        .correct {
+            border-color: #2ecc71 !important;
+            background-color: #d4edda !important;
+            pointer-events: none; /* មិនឱ្យចុចទៀតទេ */
+            opacity: 0.8;
+        }
+        /* ស្ថានភាពពេលឆ្លើយខុស */
+        .wrong {
+            border-color: #e74c3c !important;
+            background-color: #f8d7da !important;
+        }
+        #message {
+            margin-top: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎮 ហ្គេមផ្គូផ្គង (Match-Up Game) 🎮</h1>
+    <p class="instruction">សូមចុចលើ "រូបភាព" រួចចុចលើ "ពាក្យ" ឱ្យបានត្រឹមត្រូវ!</p>
+
+    <div class="game-container">
+        <!-- ជួររូបភាព (ខាងឆ្វេង) -->
+        <div class="column" id="image-column">
+            <!-- លោកគ្រូអាចប្តូរតំណភ្ជាប់រូបភាព (src) នៅក្នុងនេះបាន -->
+            <div class="card image-card" data-match="apple">
+                <img src="https://cdn-icons-png.flaticon.com/512/415/415682.png" alt="ផ្លែប៉ោម">
+            </div>
+            <div class="card image-card" data-match="banana">
+                <img src="https://cdn-icons-png.flaticon.com/512/2909/2909761.png" alt="ចេក">
+            </div>
+            <div class="card image-card" data-match="orange">
+                <img src="https://cdn-icons-png.flaticon.com/512/1514/1514930.png" alt="ក្រូច">
+            </div>
+        </div>
+
+        <!-- ជួរពាក្យ (ខាងស្តាំ) -->
+        <div class="column" id="text-column">
+            <!-- ដាក់តាមលំដាប់លាយឡំគ្នា -->
+            <div class="card text-card" data-match="orange">ក្រូច</div>
+            <div class="card text-card" data-match="apple">ផ្លែប៉ោម</div>
+            <div class="card text-card" data-match="banana">ចេក</div>
+        </div>
+    </div>
+
+    <div id="message"></div>
+
+    <script>
+        let selectedImage = null;
+        let selectedText = null;
+        let totalPairs = 3;
+        let correctPairs = 0;
+
+        const imageCards = document.querySelectorAll('.image-card');
+        const textCards = document.querySelectorAll('.text-card');
+        const messageDiv = document.getElementById('message');
+
+        // ចុចលើរូបភាព
+        imageCards.forEach(card => {
+            card.addEventListener('click', () => {
+                if(card.classList.contains('correct')) return;
+                
+                // ដក selection ចាស់ចេញ
+                if(selectedImage) selectedImage.classList.remove('selected');
+                
+                selectedImage = card;
+                card.classList.add('selected');
+                checkMatch();
+            });
+        });
+
+        // ចុចលើពាក្យ
+        textCards.forEach(card => {
+            card.addEventListener('click', () => {
+                if(card.classList.contains('correct')) return;
+                
+                if(selectedText) selectedText.classList.remove('selected');
+                
+                selectedText = card;
+                card.classList.add('selected');
+                checkMatch();
+            });
+        });
+
+        // ពិនិត្យការផ្គូផ្គង
+        function checkMatch() {
+            if (selectedImage && selectedText) {
+                const imgID = selectedImage.getAttribute('data-match');
+                const textID = selectedText.getAttribute('data-match');
+
+                if (imgID === textID) {
+                    // ត្រូវ
+                    selectedImage.classList.add('correct');
+                    selectedText.classList.add('correct');
+                    selectedImage.classList.remove('selected');
+                    selectedText.classList.remove('selected');
+                    
+                    correctPairs++;
+                    if(correctPairs === totalPairs) {
+                        messageDiv.innerText = "🎉 អស្ចារ្យណាស់! កូនៗឆ្លើយត្រូវទាំងអស់ហើយ! 🎉";
+                    }
+                } else {
+                    // ខុស
+                    const tempImg = selectedImage;
+                    const tempText = selectedText;
+                    
+                    tempImg.classList.add('wrong');
+                    tempText.classList.add('wrong');
+                    
+                    setTimeout(() => {
+                        tempImg.classList.remove('wrong', 'selected');
+                        tempText.classList.remove('wrong', 'selected');
+                    }, 500);
+                }
+
+                // លុប variable ទុកជ្រើសរើសសារថ្មី
+                selectedImage = null;
+                selectedText = null;
+            }
+        }
+    </script>
+
+</body>
+</html>

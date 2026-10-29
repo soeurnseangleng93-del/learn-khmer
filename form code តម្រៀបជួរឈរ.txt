@@ -1,0 +1,251 @@
+form code តម្រៀបជួរឈរ
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <style>
+      body { 
+        font-family: 'Kantumruy Pro', Arial, sans-serif; 
+        margin: 0;
+        padding: 10px;
+        font-size: 16px; /* ដំឡើងទំហំអក្សរឱ្យធំជាងមុន */
+        background-color: #f4f6f9;
+      }
+      h3 { 
+        text-align: center; 
+        color: #1a73e8; 
+        margin: 10px 0 20px 0;
+        font-size: 20px;
+      }
+      .form-container {
+        width: 100%;
+        max-width: 100%; /* រីកពេញអេក្រង់ */
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        box-sizing: border-box;
+      }
+      .form-group { 
+        margin-bottom: 16px; 
+      }
+      label { 
+        font-weight: bold; 
+        display: block; 
+        margin-bottom: 6px; 
+        color: #333;
+        font-size: 15px;
+      }
+      input[type="text"], 
+      input[type="number"], 
+      input[type="date"], 
+      select {
+        width: 100%;
+        padding: 12px 14px; /* ដំឡើងទំហំប្រអប់ឱ្យធំ ងាយស្រួលចុច */
+        box-sizing: border-box;
+        border: 1.5px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px; /* ទំហំអក្សរក្នុងប្រអប់ធំ */
+        background-color: #fafafa;
+      }
+      input:focus, select:focus {
+        border-color: #1a73e8;
+        outline: none;
+        background-color: #fff;
+      }
+      /* ប្តូរការរៀបចំឱ្យរត់ចុះក្រោមជាជួរទោលទាំងអស់ */
+      .row { 
+        display: flex; 
+        flex-direction: column; 
+        gap: 0px; 
+      }
+      .col { 
+        width: 100%; 
+      }
+      fieldset { 
+        border: 1.5px solid #e0e0e0; 
+        border-radius: 8px; 
+        padding: 15px; 
+        margin-bottom: 20px; 
+        background-color: #fff;
+      }
+      legend { 
+        font-weight: bold; 
+        color: #1a73e8; 
+        font-size: 16px;
+        padding: 0 8px;
+      }
+      button {
+        margin-top: 10px;
+        padding: 14px;
+        background-color: #1a73e8;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        font-weight: bold;
+        font-size: 18px; /* ប៊ូតុងធំជាងមុន */
+      }
+      button:hover { 
+        background-color: #1557b0; 
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h3>ទម្រង់បញ្ចូលទិន្នន័យសិស្ស</h3>
+      <form id="studentForm" onsubmit="handleFormSubmit(this)">
+        
+        <div class="form-group">
+          <label for="idNum">អត្ថលេខ:</label>
+          <input type="number" id="idNum" name="idNum" required placeholder="បញ្ចូលអត្ថលេខ">
+        </div>
+
+        <div class="form-group">
+          <label for="gender">ភេទ:</label>
+          <select id="gender" name="gender" required>
+            <option value="">--ជ្រើសរើស--</option>
+            <option value="ប្រុស">ប្រុស</option>
+            <option value="ស្រី">ស្រី</option>
+            <option value="ប">ប</option>
+            <option value="ស">ស</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fullName">គោតនាម និងនាម:</label>
+          <input type="text" id="fullName" name="fullName" required placeholder="បញ្ចូលគោតនាម និងនាម">
+        </div>
+
+        <div class="form-group">
+          <label for="dob">ថ្ងៃខែឆ្នាំកំណើត:</label>
+          <input type="date" id="dob" name="dob" required>
+        </div>
+
+        <!-- ទីកន្លែងកំណើត -->
+        <fieldset>
+          <legend>ទីកន្លែងកំណើត</legend>
+          <div class="form-group">
+            <label for="pobVillage">ភូមិ:</label>
+            <input type="text" id="pobVillage" name="pobVillage">
+          </div>
+          <div class="form-group">
+            <label for="pobCommune">ឃុំ/សង្កាត់:</label>
+            <input type="text" id="pobCommune" name="pobCommune">
+          </div>
+          <div class="form-group">
+            <label for="pobDistrict">ស្រុក/ខណ្ឌ:</label>
+            <input type="text" id="pobDistrict" name="pobDistrict">
+          </div>
+          <div class="form-group">
+            <label for="pobProvince">ខេត្ត/ក្រុង:</label>
+            <input type="text" id="pobProvince" name="pobProvince">
+          </div>
+        </fieldset>
+
+        <!-- ព័ត៌មានឪពុកម្តាយ -->
+        <div class="form-group">
+          <label for="fatherName">ឈ្មោះឪពុក:</label>
+          <input type="text" id="fatherName" name="fatherName">
+        </div>
+        <div class="form-group">
+          <label for="fatherJob">មុខរបរឪពុក:</label>
+          <input type="text" id="fatherJob" name="fatherJob">
+        </div>
+        <div class="form-group">
+          <label for="motherName">ឈ្មោះម្តាយ:</label>
+          <input type="text" id="motherName" name="motherName">
+        </div>
+        <div class="form-group">
+          <label for="motherJob">មុខរបរម្តាយ:</label>
+          <input type="text" id="motherJob" name="motherJob">
+        </div>
+
+        <!-- អាសយដ្ឋានបច្ចុប្បន្ន -->
+        <fieldset>
+          <legend>អាសយដ្ឋានបច្ចុប្បន្ន</legend>
+          <div class="form-group">
+            <label for="curVillage">ភូមិ:</label>
+            <input type="text" id="curVillage" name="curVillage">
+          </div>
+          <div class="form-group">
+            <label for="curCommune">ឃុំ/សង្កាត់:</label>
+            <input type="text" id="curCommune" name="curCommune">
+          </div>
+          <div class="form-group">
+            <label for="curDistrict">ស្រុក/ខណ្ឌ:</label>
+            <input type="text" id="curDistrict" name="curDistrict">
+          </div>
+          <div class="form-group">
+            <label for="curProvince">ខេត្ត/ក្រុង:</label>
+            <input type="text" id="curProvince" name="curProvince">
+          </div>
+        </fieldset>
+
+        <div class="form-group">
+          <label for="note">ផ្សេងៗ:</label>
+          <input type="text" id="note" name="note">
+        </div>
+
+        <button type="submit" id="submitBtn">រក្សាទុកទិន្នន័យ</button>
+      </form>
+    </div>
+
+    <script>
+      function handleFormSubmit(formObject) {
+        event.preventDefault();
+        var btn = document.getElementById("submitBtn");
+        btn.disabled = true;
+        btn.innerHTML = "កំពុងរក្សាទុក...";
+
+        google.script.run
+          .withSuccessHandler(function(response) {
+            alert('រក្សាទុកទិន្នន័យបានជោគជ័យ!');
+            document.getElementById("studentForm").reset();
+            btn.disabled = false;
+            btn.innerHTML = "រក្សាទុកទិន្នន័យ";
+          })
+          .withFailureHandler(function(error) {
+            alert('មានបញ្ហា៖ ' + error.message);
+            btn.disabled = false;
+            btn.innerHTML = "រក្សាទុកទិន្នន័យ";
+          })
+          .processForm(formObject);
+      }
+    </script>
+  </body>
+</html>
+
+
+១. ផ្នែក <head> និង <style> (ការរចនារូបរាង CSS)
+<meta name="viewport" ...>: បញ្ជាឱ្យកម្មវិធីរុករក (Browser) នៅលើទូរសព្ទស្គាល់ និងលៃតម្រូវទំហំទំព័រឱ្យត្រូវបាសជាមួយអេក្រង់ស្មាតហ្វូនដោយស្វ័យប្រវត្តិ។
+
+font-size: 16px; និង padding: 12px 14px;: កំណត់ទំហំអក្សរ និងប្រអប់បញ្ចូលទិន្នន័យឱ្យធំល្មម (មិនតូចពេក) ដើម្បីឱ្យងាយស្រួលមើល និងចុចបំពេញដោយម្រាមដៃនៅលើទូរសព្ទ។
+
+.form-container: ជាប្រអប់ធំពណ៌សព័ទ្ធជុំវិញ Form ទាំងអស់ ដោយកំណត់ width: 100% ដើម្បីឱ្យវាលាតសន្ធឹងពេញទំហំអេក្រង់ទូរសព្ទយ៉ាងស្រស់ស្អាត។
+
+អន្តរកម្ម input:focus: នៅពេលអ្នកចុចចូលក្នុងប្រអប់ណាមួយ ស៊ុមរបស់ប្រអប់នឹងប្តូរទៅជាពណ៌ខຽវ (#1a73e8) ដើម្បីឱ្យដឹងថាអ្នកកំពុងវាយអក្សរនៅត្រង់ណា។
+
+២. ផ្នែក <body> (โครงสร้าง Form)
+<div class="form-container">: ផ្ទុកចំណងជើង និងទម្រង់ Form ទាំងមូល។
+
+<form id="studentForm" onsubmit="handleFormSubmit(this)">: កំណត់ថាពេលណាដែលអ្នកចុចប៊ូតុង "រក្សាទុកទិន្នន័យ" វានឹងកុំឱ្យទំព័រ Refresh ភ្លាមៗ ប៉ុន្តែនឹងហៅមុខងារ JavaScript ឈ្មោះ handleFormSubmit មកដំណើរការជំនួសវិញ។
+
+<fieldset> និង <legend>: ប្រើសម្រាប់បែងចែកក្រុមព័ត៌មានដាច់ដោយឡែកពីគ្នា ដូចជា "ទីកន្លែងកំណើត" និង "អាសយដ្ឋានបច្ចុប្បន្ន" ដើម្បីឱ្យ Form មើលទៅមានសោភ័ណភាព និងមានរបៀបរៀបរយ។
+
+៣. ផ្នែក <script> (កូដ JavaScript ប្រតិបត្តិការ)
+event.preventDefault();: បញ្ឈប់ការបញ្ជូនទិន្នន័យបែបធម្មតា (ដែលធ្វើឱ្យទំព័រដូរចេញឬ Refresh) ដើម្បីឱ្យយើងអាចផ្ញាទិន្នន័យទៅកាន់ Google Sheets ដោយរលូន។
+
+ប៊ូតុងផ្ទុកបណ្ដោះអាសន្ន (btn.disabled = true;): ពេលអ្នកចុចរក្សាទុក ប៊ូតុងនឹងប្តូរអត្ថបទទៅជា "កំពុងរក្សាទុក..." និងបិទមិនឱ្យចុចซ้ำ ដើម្បីការពារការបញ្ជូនទិន្នន័យស្ទួនគ្នា។
+
+google.script.run: ជាស្ពានតភ្ជាប់រវាងកូដ HTML (Frontend) និងកូដ Google Apps Script (Backend ក្នុង Code.gs) ដើម្បីយកទិន្នន័យដែលអ្នកបានបំពេញទៅសរសេរដាក់ចូលក្នុង Google Sheets របស់អ្នក។
+
+.withSuccessHandler(...): ដំណើរការពេលរក្សាទុកបានសម្រេច (បង្ហាញសារជោគជ័យ និងសម្អាត Form ដើមវិញ)។
+
+.withFailureHandler(...): ដំណើរការពេលមានបញ្ហាខុសប្រក្រតីកើតឡើង (បង្ហាញសារ Error ប្រាប់អ្នក)។
+
+

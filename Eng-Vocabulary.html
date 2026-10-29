@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Vocabulary Grid</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
+        body { font-family: 'Fredoka', sans-serif; }
+    </style>
+</head>
+<body class="bg-amber-50 min-h-screen p-6">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-amber-600 drop-shadow-sm">My Word Book 📖</h1>
+            <p class="text-gray-500 text-lg mt-2">Tap a card to hear the sound!</p>
+        </header>
+
+        <div id="word-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+            </div>
+    </div>
+
+    <script>
+        // Data Array: Picture (Emoji), Word, Audio track URL
+        const vocabularyData = [
+            { word: "lion", emoji: "🦁", audio: "" },
+            { word: "monkey", emoji: "🐵", audio: "" },
+            { word: "frog", emoji: "🐸", audio: "" },
+            { word: "pizza", emoji: "🍕", audio: "" },
+            { word: "ice cream", emoji: "🍦", audio: "" },
+            { word: "bus", emoji: "🚌", audio: "" },
+            { word: "ball", emoji: "⚽", audio: "" },
+            { word: "sun", emoji: "☀️", audio: "" }
+        ];
+
+        const gridContainer = document.getElementById('word-grid');
+
+        // Generate the Frontend HTML elements dynamically
+        vocabularyData.forEach((item) => {
+            // Create Card Component
+            const card = document.createElement('div');
+            card.className = "bg-white border-4 border-sky-300 rounded-3xl p-4 flex flex-col items-center justify-between shadow-md hover:shadow-xl hover:border-sky-400 transition-all transform hover:-translate-y-1 active:scale-95 cursor-pointer";
+            
+            // Build the interior design: Picture -> Word -> Audio Button
+            card.innerHTML = `
+                <div class="text-7xl my-2 selection:bg-transparent">${item.emoji}</div>
+                
+                <h3 class="text-2xl font-bold text-gray-700 tracking-wide capitalize my-1">${item.word}</h3>
+                
+                <button class="mt-3 bg-sky-400 text-white rounded-full p-2 border-2 border-white shadow-sm flex items-center justify-center w-10 h-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H3a1 1 0 01-1-1V8a1 1 0 011-1h1.586l3.657-3.657a1 1 0 011.14-.267zM15.707 5.293a1 1 0 010 1.414 4 4 0 000 5.657 1 1 0 01-1.414-1.414 2 2 0 000-2.829 1 1 0 011.414-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            `;
+
+            // Click action to play sound using built-in system text-to-speech
+            card.addEventListener('click', () => {
+                const voiceEngine = new SpeechSynthesisUtterance(item.word);
+                voiceEngine.rate = 0.8; // Friendly slow speed for children
+                window.speechSynthesis.speak(voiceEngine);
+            });
+
+            // Append built card to grid layout
+            gridContainer.appendChild(card);
+        });
+    </script>
+</body>
+</html>

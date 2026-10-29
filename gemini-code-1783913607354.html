@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>សៀវភៅពាក្យសព្ទកុមារ (Kids Khmer Word Book)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { 
+            font-family: 'Kantumruy Pro', sans-serif; 
+        }
+    </style>
+</head>
+<body class="bg-amber-50 min-h-screen p-6">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-amber-600 drop-shadow-sm mb-2">សៀវភៅពាក្យសព្ទរបស់ខ្ញុំ 📖</h1>
+            <p class="text-emerald-600 text-xl font-semibold">ចុចលើរូបភាពដើម្បីស្តាប់សំឡេងអាន!</p>
+        </header>
+
+        <div id="word-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+            </div>
+    </div>
+
+    <script>
+        // Data Array inside JavaScript with Khmer words and matching emojis
+        // បញ្ជីទិន្នន័យពាក្យខ្មែរ និងរូបភាពតំណាង
+        const vocabularyData = [
+            { word: "សឹង្ហ", emoji: "🦁", Audio: "audio/sing.mp3" },
+            { word: "ស្វា", emoji: "🐵", Audio: "audio/swa.mp3" },
+            { word: "កង្កែប", emoji: "🐸", Audio: "audio/kangkai.mp3" },
+            { word: "នំភីហ្សា", emoji: "🍕", Audio: "audio/nampheisa.mp3" },
+            { word: "ការ៉េម", emoji: "🍦", Audio: "audio/karem.mp3" },
+            { word: "ឡានក្រុង", emoji: "🚌", Audio: "audio/lan-krong.mp3" },
+            { word: "បាល់", emoji: "⚽", Audio: "audio/bal.mp3" },
+            { word: "សង្គ្រាម", emoji: "⚔️", Audio: "audio/sangkram.mp3" }
+        ];
+
+        const gridContainer = document.getElementById('word-grid');
+
+        // Loop through the data to generate UI Cards dynamically
+        // កូដបង្កើតកាតបង្ហាញពាក្យនៅលើអេក្រង់ដោយស្វ័យប្រវត្ត
+        vocabularyData.forEach((item) => {
+            // Create the HTML div container for the card
+            const card = document.createElement('div');
+            card.className = "bg-white border-4 border-emerald-300 rounded-3xl p-5 flex flex-col items-center justify-between shadow-md hover:shadow-xl hover:border-emerald-400 transition-all transform hover:-translate-y-1 active:scale-95 cursor-pointer";
+            
+            // Layout inside the card: Emoji -> Khmer Word -> Speaker Button
+            card.innerHTML = `
+                <div class="text-7xl my-2 selection:bg-transparent">${item.emoji}</div>
+                
+                <h3 class="text-2xl font-bold text-slate-700 tracking-wide my-2">${item.word}</h3>
+                
+                <button class="mt-2 bg-emerald-400 text-white rounded-full p-2 border-2 border-white shadow-sm flex items-center justify-center w-11 h-11 pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H3a1 1 0 01-1-1V8a1 1 0 011-1h1.586l3.657-3.657a1 1 0 011.14-.267zM15.707 5.293a1 1 0 010 1.414 4 4 0 000 5.657 1 1 0 01-1.414-1.414 2 2 0 000-2.829 1 1 0 011.414-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            `;
+
+            // Click listener setup for Text-To-Speech audio engine configured for Khmer
+            // កូដបញ្ជាឱ្យបន្លឺសំឡេងអានជាភាសាខ្មែរពេលក្មេងៗចុចលើកាត
+            card.addEventListener('click', () => {
+                const voiceEngine = new SpeechSynthesisUtterance(item.word);
+                
+                // CRITICAL: Tells the system engine to look for Khmer voice engines ('km-KH')
+                voiceEngine.lang = 'km-KH'; 
+                
+                // Slow speech rate slightly so kids can repeat after it clearly
+                voiceEngine.rate = 0.75; 
+                
+                window.speechSynthesis.speak(voiceEngine);
+            });
+
+            // Put the newly built card into the grid view
+            gridContainer.appendChild(card);
+        });
+    </script>
+</body>
+</html>

@@ -62,25 +62,12 @@
             `;
 
             // Click listener តែមួយគត់ដែលមានការកំណត់សម្លេងភាសាខ្មែរត្រឹមត្រូវ
+            // លេងសំឡេងពី File .m4a ពេលចុចលើកាត
             card.addEventListener('click', () => {
-                if (!('speechSynthesis' in window)) {
-                    alert("Browser របស់អ្នកមិនគាំទ្រមុខងារបញ្ចេញសំឡេងទេ!");
-                    return;
-                }
-
-                const voiceEngine = new SpeechSynthesisUtterance(item.word);
-                voiceEngine.lang = 'km-KH'; 
-                voiceEngine.rate = 0.75; 
-
-                const voices = window.speechSynthesis.getVoices();
-                const khmerVoice = voices.find(v => v.lang.includes('km') || v.lang.includes('KH'));
-                
-                if (khmerVoice) {
-                    voiceEngine.voice = khmerVoice;
-                }
-
-                window.speechSynthesis.cancel();
-                window.speechSynthesis.speak(voiceEngine);
+                const sound = new Audio(item.Audio);
+                sound.play().catch(error => {
+                    console.log("Error playing audio:", error);
+                });
             });
 
             gridContainer.appendChild(card);

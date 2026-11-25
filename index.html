@@ -8,9 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { 
-            font-family: 'Kantumruy Pro', sans-serif; 
+            font-family: 'Battambang', sans-serif; 
         }
     </style>
 </head>
@@ -22,56 +23,151 @@
             <p class="text-emerald-600 text-xl font-semibold">ចុចលើរូបភាពដើម្បីស្តាប់សំឡេងអាន!</p>
         </header>
 
-        <div id="word-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-        </div>
+        <!-- បារប៊ូតុង Tabs (មេរៀន) -->
+        <div id="tabs-container" class="flex flex-wrap justify-center gap-3 mb-8"></div>
+
+        <!-- កន្លែងបង្ហាញ Category និងកាតពាក្យសព្ទ -->
+        <div id="content-container" class="space-y-8 pt-4"></div>
     </div>
 
     <script>
-        const vocabularyData = [
-    { word: "កកេរ", emoji: " ", Audio: "audio/korke.m4a" },
-    { word: "ឆាឆៅ", emoji: " ", Audio: "audio/charchav.m4a" },
-    { word: "ចរចា", emoji: " ", Audio: "audio/chorchar.m4a" },
-    { word: "កែខៃ", emoji: " ", Audio: "audio/kaekhai.m4a" },
-    { word: "ឆេះខោ", emoji: " ", Audio: "audio/cheskhou.m4a" },
-    { word: "ខះក", emoji: "", Audio: "audio/kharskor.m4a" }, // ជំនួសដោយឯកសារដែលមានស្រាប់ ឬដាក់បញ្ចូលឯកសារថ្មី
-    { word: "បាល់", emoji: "⚽", Audio: "audio/bal.m4a" },
-    { word: "សង្គ្រាម", emoji: "⚔️", Audio: "audio/sangkram.m4a" }
-    ];
+        // ទិន្នន័យមេរៀន (អ្នកអាចបន្ថែមមេរៀនទី២ ទី៣ ចូលទីនេះបាន)
+        const lessonData = [
+            {
+                id: "lesson1",
+                title: "មេរៀនទី១: ព្យញ្ជនៈផ្សំស្រៈ",
+                category: [
+                    {
+                        name: "កខចឆ ផ្សំស្រៈ",
+                        words: [
+                            { word: "កកេរ", emoji: "", Audio: "audio/korke.m4a" },
+                            { word: "ឆាឆៅ", emoji: "", Audio: "audio/charchav.m4a" },
+                            { word: "ចរចា", emoji: "", Audio: "audio/chorchar.m4a" },
+                            { word: "កែខៃ", emoji: "", Audio: "audio/kaekhai.m4a" },
+                            { word: "ឆេះខោ", emoji: "", Audio: "audio/cheskhou.m4a" },
+                            { word: "ខះក", emoji: "", Audio: "audio/kharskor.m4a" },
+                            { word: "កកូរ", emoji: "", Audio: "audio/kakor.m4a" },
+                            { word: "កករ", emoji: "", Audio: "audio/korkor.m4a" },
+                            { word: "ចៅកែ", emoji: "", Audio: "audio/chavchhaek.m4a" },
+                            { word: "កកោះ", emoji: "", Audio: "audio/korkhors.m4a" }
+                        ]
+                    },
+                    {
+                        name: "ដឋណ ផ្សំស្រៈ",
+                        words: [
+                            { word: "ឋិតិ", emoji: "", Audio: "audio/tite.m4a" },
+                            { word: "ចំណី", emoji: "", Audio: "audio/chamngi.m4a" },
+                            { word: "ដុំដី", emoji: "", Audio: "audio/dumdi.m4a" },
+                            { word: "តាខេ", emoji: "", Audio: "audio/takhe.m4a" },
+                            { word: "ចៅឋូ", emoji: "", Audio: "audio/chavtho.m4a" },
+                            { word: "កដៃ", emoji: "", Audio: "audio/kordai.m4a" },
+                            { word: "ចៅតូ", emoji: "", Audio: "audio/chavto.m4a" },
+                            { word: "ដោះដូរ", emoji: "", Audio: "audio/dohdor.m4a" }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: "lesson2",
+                title: "មេរៀនទី២: ប្រកប",
+                category: [
+                    {
+                        name: "ពាក្យព្យញ្ជនៈប្រកប",
+                        words: [
+                            { word: "ឆ្ងាញ់", emoji: "🍲", Audio: "audio/chnganh.m4a" }, // ឧទាហរណ៍ពាក្យបន្ថែម
+                        ]
+                    }
+                ]
+            }
+        ];
 
-        const gridContainer = document.getElementById('word-grid');
+        const tabsContainer = document.getElementById('tabs-container');
+        const contentContainer = document.getElementById('content-container');
 
-        // ដោះស្រាយបញ្ហា Voice ផ្ទុកយឺត (ដាក់នៅខាងក្រៅ Loop ម្ដងបានហើយ)
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = () => {
-                window.speechSynthesis.getVoices();
-            };
-        }
-
-        vocabularyData.forEach((item) => {
-            const card = document.createElement('div');
-            card.className = "bg-white border-4 border-emerald-300 rounded-3xl p-5 flex flex-col items-center justify-between shadow-md hover:shadow-xl hover:border-emerald-400 transition-all transform hover:-translate-y-1 active:scale-95 cursor-pointer";
+        // សម្រាប់បង្ហាញមាតិកាស្របតាម ID របស់មេរៀន
+        function renderLesson(lessonId) {
+            contentContainer.innerHTML = '';
             
-            card.innerHTML = `
-                <div class="text-7xl my-2 selection:bg-transparent">${item.emoji}</div>
-                <h3 class="text-2xl font-bold text-slate-700 tracking-wide my-2">${item.word}</h3>
-                <button class="mt-2 bg-emerald-400 text-white rounded-full p-2 border-2 border-white shadow-sm flex items-center justify-center w-11 h-11 pointer-events-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H3a1 1 0 01-1-1V8a1 1 0 011-1h1.586l3.657-3.657a1 1 0 011.14-.267zM15.707 5.293a1 1 0 010 1.414 4 4 0 000 5.657 1 1 0 01-1.414-1.414 2 2 0 000-2.829 1 1 0 011.414-1.414z" clip-rule="evenodd" />
-                    </svg>
-                </button>
-            `;
+            const selectedLesson = lessonData.find(l => l.id === lessonId);
+            if (!selectedLesson) return;
 
-            // Click listener តែមួយគត់ដែលមានការកំណត់សម្លេងភាសាខ្មែរត្រឹមត្រូវ
-            // លេងសំឡេងពី File .m4a ពេលចុចលើកាត
-            card.addEventListener('click', () => {
-                const sound = new Audio(item.Audio);
-                sound.play().catch(error => {
-                    console.log("Error playing audio:", error);
+            selectedLesson.category.forEach((cat, index) => {
+                const section = document.createElement('div');
+                section.className = "mb-8";
+                
+                // បង្កើត ID ពិសេសសម្រាប់ Category នីមួយៗដោយផ្អែកលើ lessonId និង index
+                const gridId = `grid-${selectedLesson.id}-${index}`;
+
+                section.innerHTML = `
+                    <div class="mb-4 text-center sm:text-left">
+                        <h2 class="text-xl font-bold text-amber-800 bg-amber-200 py-2 px-4 rounded-xl inline-block shadow-sm">
+                            ${cat.name}
+                        </h2>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6" id="${gridId}"></div>
+                `;
+                
+                contentContainer.appendChild(section);
+
+                // ទាញយក Grid តាមរយៈ ID ថ្មីដែលបានបង្កើត
+                const gridContainer = document.getElementById(gridId);
+
+                cat.words.forEach((item) => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white border-4 border-emerald-300 rounded-3xl p-5 flex flex-col items-center justify-between shadow-md hover:shadow-xl hover:border-emerald-400 transition-all transform hover:-translate-y-1 active:scale-95 cursor-pointer";
+                    
+                    card.innerHTML = `
+                        <div class="text-7xl my-2 selection:bg-transparent">${item.emoji}</div>
+                        <h3 class="text-5xl font-bold text-slate-700 tracking-wide my-2">${item.word}</h3>
+                        <button class="mt-2 bg-emerald-400 text-white rounded-full p-2 border-2 border-white shadow-sm flex items-center justify-center w-11 h-11 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H3a1 1 0 01-1-1V8a1 1 0 011-1h1.586l3.657-3.657a1 1 0 011.14-.267zM15.707 5.293a1 1 0 010 1.414 4 4 0 000 5.657 1 1 0 01-1.414-1.414 2 2 0 000-2.829 1 1 0 011.414-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    `;
+
+                    card.addEventListener('click', () => {
+                        const sound = new Audio(item.Audio);
+                        sound.play().catch(error => {
+                            console.log("Error playing audio:", error);
+                        });
+                    });
+
+                    gridContainer.appendChild(card);
                 });
             });
+        }
 
-            gridContainer.appendChild(card);
-        });
+        // បង្កើតប៊ូតុង Tabs ស្វ័យប្រវត្តិ
+        function renderTabs() {
+            tabsContainer.innerHTML = '';
+            lessonData.forEach((lesson, index) => {
+                const tabButton = document.createElement('button');
+                tabButton.className = `py-3 px-6 rounded-2xl font-bold text-lg shadow-md transition-all ${
+                    index === 0 
+                        ? 'bg-amber-500 text-white shadow-amber-200' 
+                        : 'bg-white text-slate-700 hover:bg-amber-100 border-2 border-amber-200'
+                }`;
+                tabButton.innerText = lesson.title;
+
+                tabButton.addEventListener('click', () => {
+                    // ផ្លាស់ប្តូរពណ៌ប៊ូតុងដែលបានជ្រើសរើស
+                    document.querySelectorAll('#tabs-container button').forEach(btn => {
+                        btn.className = 'py-3 px-6 rounded-2xl font-bold text-lg shadow-md transition-all bg-white text-slate-700 hover:bg-amber-100 border-2 border-amber-200';
+                    });
+                    tabButton.className = 'py-3 px-6 rounded-2xl font-bold text-lg shadow-md transition-all bg-amber-500 text-white shadow-amber-200';
+
+                    // បង្ហាញមាតិកាតមេរៀននោះ
+                    renderLesson(lesson.id);
+                });
+
+                tabsContainer.appendChild(tabButton);
+            });
+        }
+
+        // ចាប់ផ្តើមដំណើរការដំបូងដោយបង្ហាញមេរៀនទី១
+        renderTabs();
+        renderLesson(lessonData[0].id);
     </script>
 </body>
 </html>
